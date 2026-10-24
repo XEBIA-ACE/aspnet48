@@ -1,0 +1,37 @@
+# Feature Specification: b41c16c1-0016-5b8d-8f70-29e608d4c11f
+
+## User Scenarios & Testing
+- **b41c16c1-0016-5b8d-8f70-29e608d4c11f**: Given the solution currently consists of a classic ASP.NET Web API project with Global.asax.cs and App_Start, when a new project is added for the migration, then that new project is an SDK-style .NET 8 Web API project (using the Web SDK, targeting .NET 8, using PackageReference) and the original .NET Framework project remains unchanged for now.
+- **b41c16c1-0016-5b8d-8f70-29e608d4c11f**: Given the new .NET 8 Web API project is configured in the solution, when `dotnet build` is run for that project, then the build succeeds without errors and without referencing System.Web or other .NET Framework-only assemblies.
+- **b41c16c1-0016-5b8d-8f70-29e608d4c11f**: Given the modernization objective to use ASP.NET Core, when the new project file is inspected, then it includes the necessary ASP.NET Core Web API framework references (via the appropriate SDK/FrameworkReference or packages) required to compile controllers, routing, and minimal hosting code in later stories.
+- **b41c16c1-0016-5b8d-8f70-29e608d4c11f**: Given the need to maintain Swagger documentation in the migrated API, when the new project file is inspected, then it includes a Swashbuckle.AspNetCore package reference suitable for enabling OpenAPI generation and Swagger UI configuration in later stories.
+- **b41c16c1-0016-5b8d-8f70-29e608d4c11f**: Given the existing source layout with Controllers, Services, Repositories, Data, and Models directories, when those code files are added or linked into the new .NET 8 project without yet changing their behavior, then the project still builds successfully (allowing for straightforward follow-on work in hosting, DI, routing, and serialization).
+
+## Functional Requirements
+- FR-S1-001 (maps S1-AC1): The solution MUST contain a new project dedicated to the migration, and that project MUST be created using the SDK-style project format with the Web SDK (e.g., `<Project Sdk="Microsoft.NET.Sdk.Web">`).
+- FR-S1-002 (maps S1-AC1): The new project’s TargetFramework (or TargetFrameworks) element MUST specify .NET 8 (e.g., `net8.0`) and MUST be configured as a Web API project rather than a non-web project type.
+- FR-S1-003 (maps S1-AC1): The new project MUST use PackageReference items for all NuGet dependencies and MUST NOT use packages.config for dependency management.
+- FR-S1-004 (maps S1-AC1): The existing classic .NET Framework Web API project (with Global.asax.cs and App_Start) MUST remain present and logically unchanged in the solution after the new .NET 8 project is added (no removal or modification of the legacy project as part of this story).
+- FR-S1-005 (maps S1-AC2): When `dotnet build` is executed for the new .NET 8 Web API project, the build MUST complete successfully without compilation errors or warnings that prevent a successful exit code.
+- FR-S1-006 (maps S1-AC2): The new project MUST NOT include direct references to System.Web or other .NET Framework-only assemblies in its project file, and no transitive dependency or build output for the project SHOULD rely on System.Web or .NET Framework-only assemblies (to the extent this can be enforced via project configuration and package choice).
+- FR-S1-007 (maps S1-AC3): The project file for the new .NET 8 Web API project MUST include the framework and package references required to compile ASP.NET Core Web API controllers and routing (e.g., via the Web SDK and the implicit ASP.NET Core shared framework or explicit Microsoft.AspNetCore.* references).
+- FR-S1-008 (maps S1-AC3): The chosen ASP.NET Core framework references in the project file MUST be compatible with .NET 8 and sufficient to support adding minimal hosting configuration in Program.cs in later stories (even if Program.cs is not yet fully implemented here).
+- FR-S1-009 (maps S1-AC4): The project file MUST declare a Swashbuckle.AspNetCore PackageReference at a version compatible with .NET 8 and ASP.NET Core, suitable for generating OpenAPI/Swagger documents and hosting Swagger UI in later stories.
+- FR-S1-010 (maps S1-AC4): No legacy Swagger/Web API-specific packages (such as Swashbuckle 5.x for System.Web) SHOULD be referenced by the new .NET 8 project, to avoid dependency on the classic ASP.NET pipeline (noting that this criterion is implicit and may require explicit review).
+- FR-S1-011 (maps S1-AC5): The new project MUST be configured so that adding or linking the existing source files from the Controllers, Services, Repositories, Data, and Models directories allows the project to build successfully under .NET 8 without requiring behavior changes in those files as part of this story (only minimal compile-time adjustments such as namespace/usings or target-framework-compatible APIs may be applied if strictly necessary for a successful build).
+- FR-S1-012 (maps S1-AC5): After the Controllers, Services, Repositories, Data, and Models source files are added or linked into the new project, a `dotnet build` of the new project MUST succeed without errors, demonstrating that the new project configuration can host the existing layered code structure for later hosting, DI, routing, and serialization work.
+
+## Success Criteria
+- **S1-AC1**: Given the solution currently consists of a classic ASP.NET Web API project with Global.asax.cs and App_Start, when a new project is added for the migration, then that new project is an SDK-style .NET 8 Web API project (using the Web SDK, targeting .NET 8, using PackageReference) and the original .NET Framework project remains unchanged for now.
+- **S1-AC2**: Given the new .NET 8 Web API project is configured in the solution, when `dotnet build` is run for that project, then the build succeeds without errors and without referencing System.Web or other .NET Framework-only assemblies.
+- **S1-AC3**: Given the modernization objective to use ASP.NET Core, when the new project file is inspected, then it includes the necessary ASP.NET Core Web API framework references (via the appropriate SDK/FrameworkReference or packages) required to compile controllers, routing, and minimal hosting code in later stories.
+- **S1-AC4**: Given the need to maintain Swagger documentation in the migrated API, when the new project file is inspected, then it includes a Swashbuckle.AspNetCore package reference suitable for enabling OpenAPI generation and Swagger UI configuration in later stories.
+- **S1-AC5**: Given the existing source layout with Controllers, Services, Repositories, Data, and Models directories, when those code files are added or linked into the new .NET 8 project without yet changing their behavior, then the project still builds successfully (allowing for straightforward follow-on work in hosting, DI, routing, and serialization).
+- **IMPACT**: Given zero measured callers and transactions, regression risk from changing or deprecating WebApi (43476b405d51efb4) is structurally low, but creation of the new .NET 8 project will require new build and smoke tests that are outside the current symbol-level insights.
+
+## Provenance
+- **Policy version**: `ace-spec-format/v1`
+- **Accepted impact analysis revision**: `1`
+- **Accepted impact analysis**: `sha256:7f5d581671b1042a89490f8f1f973cb52284188289dbd8666877cc2eae60aea8`
+- **Repository baseline commit**: `b69a7ffae0f5d721e163bc9ab9d4ea7b7e062a86`
+- **Deterministic grounding reference**: `effba6df9ca5a26d`
