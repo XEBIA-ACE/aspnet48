@@ -1,0 +1,42 @@
+<!--
+  b41c16c1-0016-5b8d-8f70-29e608d4c11f: parallel .NET 8 ASP.NET Core Web API project for MicroProjectApplication.
+  The legacy .NET Framework 4.8 project (../../MicroProjectApplication.csproj) is intentionally left unchanged (FR-S1-004).
+  See README.md in this folder for the assumptions taken for the open questions listed in plan.md.
+-->
+<!-- FR-S1-001 / T001: SDK-style project using the Web SDK (implicit Microsoft.AspNetCore.App FrameworkReference, FR-S1-007 / FR-S1-008). -->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- FR-S1-002 / T002 -->
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>MicroProjectApplication</RootNamespace>
+    <AssemblyName>MicroProjectApplication.Api</AssemblyName>
+    <!--
+      Assumption (FR-S1-011 / T011): nullable and implicit usings are disabled so the linked legacy
+      sources compile exactly as written, with their own explicit usings and C# 7-style null handling.
+    -->
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      FR-S1-003 / T003: PackageReference only (no packages.config).
+      FR-S1-009 / T009: Swashbuckle.AspNetCore (net8.0-compatible). Not wired into Program.cs yet (later story).
+      FR-S1-010 / T010: no legacy Swashbuckle 5.x / Swashbuckle.Core / Microsoft.AspNet.WebApi.* packages.
+    -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      FR-S1-011 / FR-S1-012 / T011 / T012: Models, Data, Repositories and Services have no System.Web
+      dependency, so they are linked (shared, not duplicated) from the legacy project and compiled unchanged.
+    -->
+    <Compile Include="..\..\Models\**\*.cs" Link="Models\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\Data\**\*.cs" Link="Data\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\Repositories\**\*.cs" Link="Repositories\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\Services\**\*.cs" Link="Services\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
