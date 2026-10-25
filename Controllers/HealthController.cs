@@ -11,5 +11,13 @@ namespace MicroProjectApplication.Controllers
         {
             return Ok("Service is running.");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("~/health")]
+        public IHttpActionResult GetStatus()
+        {
+            return Ok(new { status = "ok" });
+        }
     }
 }
