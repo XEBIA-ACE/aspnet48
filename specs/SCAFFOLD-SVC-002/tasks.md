@@ -1,0 +1,7 @@
+# Tasks: SCAFFOLD-SVC-002
+
+- [ ] T001 Set up the project skeleton for this stack: dependency manifest, entrypoint, and linting/formatting config.
+- [ ] T002 Add environment-based configuration loading (no hardcoded secrets or endpoints).
+- [ ] T003 Add a health-check endpoint so the service can be verified as running locally.
+- [ ] T004 Add a database connection helper for the stack's datastore, configured via environment variables.
+- [ ] T005 Verify AC-1: Scaffold the Store Management Service (business) per its approved architecture. Technology stack: Java, Spring Boot, Spring Web MVC, Spring Data JPA, Spring Security (resource server), PostgreSQL or SQL Server, Flyway or Liquibase for DB migrations, OpenAPI/Swagger, Docker, Kubernetes or similar orchestration. Responsibilities: Expose CRUD APIs for managing customer records including name and city.; Expose CRUD APIs for managing products with name and price attributes.; Handle order placement ensuring referenced customer and product exist and that quantity rules are satisfied.; Support viewing, listing, and deletion of orders for administrative users.; Maintain transactional consistency between orders and related entities within the store database.; Secure all administrative endpoints using centralized authentication and authorization.; Emit audit records for administrative actions on customers, products, and orders.. Ground the generated spec in this service's own C3/C4 diagrams and API spec already on file in Architecture, not just this summary.
